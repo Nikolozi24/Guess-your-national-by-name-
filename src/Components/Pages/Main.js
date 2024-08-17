@@ -5,6 +5,7 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 const Main = () => {
     const [name, setName] = useState('')
     const [GuessCountry, setGuessCountry] = useState('')
+    const [Probability, setProbability] = useState(0)
     const [Progress, setProgress] = useState(0)
     const handleChange  = (e)=>{
             const val = e.target.value;
@@ -23,6 +24,8 @@ const GetCountryName = (CountryCode)=>{
 }
 const handleCountry_ID = ()=>{
     const fun = async ()=>{
+        await fetch(`https://api.nationalize.io/?name=${name}`).then(res=>res.json()).then(
+            data=>{const Pro = data?.country[0]?.probability ; setProbability(Pro)})
         
         await fetch(`https://api.nationalize.io/?name=${name}`).then(res=>res.json()).then(
             data=>data?.country[0]?.country_id
@@ -49,7 +52,8 @@ fun()
             Progress==100 &&
             
              <Alert variant='info'>
-                    Your Country By Guessing is : {GuessCountry}
+                    Your Country By Guessing is : {GuessCountry}<br/>
+                    Probability: {(Probability*100)} %
             </Alert>
         }
        </Container>
